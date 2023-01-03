@@ -8,7 +8,7 @@
 #include "schedule.h"
 #include "tests_util.h"
 
-TEST_CASE("schedule() Approximate Public Test 1", "[weight=2]") {
+TEST_CASE("schedule() Approximate Public Test 1", "[weight=2][part=2]") {
     const V2D roster = {{"CS577", "JydY", "MnWd", "tnkL"},\
      {"CS591", "gpDS", "94Ol", "tnkL"}, \
      {"CS386", "SjC0", "EYge", "Nvu1"}, \
@@ -23,7 +23,7 @@ TEST_CASE("schedule() Approximate Public Test 1", "[weight=2]") {
     verifySchedule(roster, out, 4);
 }
 
-TEST_CASE("schedule() Public Test 1", "[weight=3]") {
+TEST_CASE("schedule() Public Test 1", "[weight=3][part=2]") {
     const V2D roster = {{"CS577", "JydY", "MnWd", "tnkL"},\
      {"CS591", "gpDS", "94Ol", "tnkL"}, \
      {"CS386", "SjC0", "EYge", "Nvu1"}, \
@@ -38,7 +38,7 @@ TEST_CASE("schedule() Public Test 1", "[weight=3]") {
     verifySchedule(roster, out, 3);
 }
 
-TEST_CASE("schedule() No Match Test Public 1", "[weight=5]") {
+TEST_CASE("schedule() No Match Test Public 1", "[weight=5][part=2]") {
     const V2D roster = {
     {"CS101", "a", "b"}, \
     {"CS102", "b", "c"}, \

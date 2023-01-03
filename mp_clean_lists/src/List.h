@@ -6,6 +6,7 @@
 #include <iterator>
 #include <iostream>
 #include <algorithm>
+#include <cassert>
 using namespace std;
 
 /**
@@ -298,6 +299,8 @@ class List {
      * @return A pointer to the beginning of the now sorted chain.
      */
     ListNode* mergesort(ListNode* start, int chainLength);
+
+    void SwapListNodes(ListNode* a, ListNode* b);
 };
 
 // needed for template instantiation

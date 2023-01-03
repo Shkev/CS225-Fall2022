@@ -152,6 +152,10 @@ class HuffmanTree
         {
             // nothing
         }
+
+        bool IsLeafNode() {
+          return left == nullptr && right == nullptr;
+        }
     };
 
     /**

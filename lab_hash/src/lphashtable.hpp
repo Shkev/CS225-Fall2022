@@ -3,6 +3,8 @@
  * Implementation of the LPHashTable class.
  */
 #include "lphashtable.h"
+#include <iostream>
+#include <cassert>
 
 template <class K, class V>
 LPHashTable<K, V>::LPHashTable(size_t tsize)
@@ -71,7 +73,6 @@ LPHashTable<K, V>::LPHashTable(LPHashTable<K, V> const& other)
 template <class K, class V>
 void LPHashTable<K, V>::insert(K const& key, V const& value)
 {
-
     /**
      * @todo Implement this function.
      *
@@ -79,9 +80,17 @@ void LPHashTable<K, V>::insert(K const& key, V const& value)
      * **Do this check *after* increasing elems (but before inserting)!!**
      * Also, don't forget to mark the cell for probing with should_probe!
      */
-
-    (void) key;   // prevent warnings... When you implement this function, remove this line.
-    (void) value; // prevent warnings... When you implement this function, remove this line.
+    int idx = hashes::hash(key, size);
+    while (should_probe[idx] == true) {
+        idx++;
+        idx %= size;
+    }
+    should_probe[idx] = true;
+    table[idx] = new std::pair<K, V>(key, value);
+    elems++;
+    if (shouldResize()) {
+        resizeTable();
+    }
 }
 
 template <class K, class V>
@@ -90,18 +99,34 @@ void LPHashTable<K, V>::remove(K const& key)
     /**
      * @todo: implement this function
      */
+    int idx = findIndex(key);
+    if (idx == -1) { // key doesn't exist
+        return;
+    }
+    assert(table[idx] != nullptr);
+    delete table[idx];
+    table[idx] = nullptr;
+    should_probe[idx] = false;
+    elems--;
 }
 
 template <class K, class V>
 int LPHashTable<K, V>::findIndex(const K& key) const
-{
-    
+{    
     /**
      * @todo Implement this function
      *
      * Be careful in determining when the key is not in the table!
      */
-
+    int idx = hashes::hash(key, size);
+    int start = idx;
+    while (should_probe[idx]) {
+        if (table[idx] != nullptr && table[idx]->first == key) {
+            return idx;
+        }
+        idx = (idx + 1) % size;
+        if (start == idx) break;
+    }
     return -1;
 }
 
@@ -159,4 +184,27 @@ void LPHashTable<K, V>::resizeTable()
      *
      * @hint Use findPrime()!
      */
+    size_t new_size = findPrime(size*2);
+    std::pair<K, V>** resized_table = new std::pair<K, V>*[new_size];
+    // creating new empty should_probe array
+    delete[] should_probe;
+    should_probe = new bool[new_size];
+    for (size_t i = 0; i < new_size; ++i) {
+        should_probe[i] = false;
+        resized_table[i] = nullptr;
+    }
+    // re-hashing elements
+    for (size_t i = 0; i < size; ++i) {
+        if (table[i] != nullptr) { // if element exists rehash it
+            int idx = hashes::hash(table[i]->first, new_size);
+            while (should_probe[idx] == true) {
+                idx = (idx+1) % new_size;
+            }
+            should_probe[idx] = true;
+            resized_table[idx] = table[i];
+        }
+    }
+    delete[] table;
+    table = resized_table;
+    size = new_size;
 }

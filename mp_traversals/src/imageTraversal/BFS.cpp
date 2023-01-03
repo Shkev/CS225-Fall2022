@@ -1,10 +1,6 @@
-#include <iterator>
-#include <cmath>
-
-#include <list>
 #include <queue>
-#include <stack>
-#include <vector>
+
+#include <iostream>
 
 #include "cs225/PNG.h"
 #include "../Point.h"
@@ -13,6 +9,7 @@
 #include "BFS.h"
 
 using namespace cs225;
+using std::cout;
 
 /**
  * Initializes a breadth-first ImageTraversal on a given `png` image,
@@ -24,6 +21,10 @@ using namespace cs225;
  */
 BFS::BFS(const PNG & png, const Point & start, double tolerance) {  
   /** @todo [Part 1] */
+  search_space_ = png;
+  start_ = start;
+  tolerance_ = tolerance;
+  add(start);
 }
 
 /**
@@ -31,7 +32,7 @@ BFS::BFS(const PNG & png, const Point & start, double tolerance) {
  */
 ImageTraversal::Iterator BFS::begin() {
   /** @todo [Part 1] */
-  return ImageTraversal::Iterator();
+  return ImageTraversal::Iterator(this);
 }
 
 /**
@@ -47,6 +48,7 @@ ImageTraversal::Iterator BFS::end() {
  */
 void BFS::add(const Point & point) {
   /** @todo [Part 1] */
+  next_points_.push(point);
 }
 
 /**
@@ -54,7 +56,9 @@ void BFS::add(const Point & point) {
  */
 Point BFS::pop() {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  Point p = next_points_.front();
+  next_points_.pop();
+  return p;
 }
 
 /**
@@ -62,7 +66,10 @@ Point BFS::pop() {
  */
 Point BFS::peek() const {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  if (next_points_.empty()) {
+    throw std::runtime_error("BFS is empty! No elements to access.");
+  }
+  return next_points_.front();
 }
 
 /**
@@ -70,5 +77,5 @@ Point BFS::peek() const {
  */
 bool BFS::empty() const {
   /** @todo [Part 1] */
-  return true;
+  return next_points_.empty();
 }

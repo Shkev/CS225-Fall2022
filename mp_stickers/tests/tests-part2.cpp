@@ -61,7 +61,7 @@ TEST_CASE("StickerSheet::changeMaxStickers() does not discard original stickers 
   REQUIRE( sheet.render() == expected );
 }
 
-TEST_CASE("StickerSheet::changeMaxStickers() can increase the number of stickers on an image", "[weight=1][part=2][timeout=30000][valgrind]") {
+TEST_CASE("StickerSheet::changeMaxStickers() can increase the number of stickers on an image", "[changeMaxStickers-change-max][weight=1][part=2][timeout=30000][valgrind]") {
   Image alma; alma.readFromFile("../tests/alma.png");
   Image i;    i.readFromFile("../tests/i.png");
 
@@ -77,7 +77,7 @@ TEST_CASE("StickerSheet::changeMaxStickers() can increase the number of stickers
   REQUIRE( sheet.render() == expected );
 }
 
-TEST_CASE("StickerSheet::changeMaxStickers() discards stickers beyond the end of a smaller StickerSheet", "[weight=1][part=2][timeout=30000][valgrind]") {
+TEST_CASE("StickerSheet::changeMaxStickers() discards stickers beyond the end of a smaller StickerSheet", "[changeMaxStickers-discard][weight=1][part=2][timeout=30000][valgrind]") {
   Image alma;     alma.readFromFile("../tests/alma.png");
   Image i;        i.readFromFile("../tests/i.png");
   Image expected; expected.readFromFile("../tests/expected.png");
@@ -96,7 +96,7 @@ TEST_CASE("StickerSheet::changeMaxStickers() discards stickers beyond the end of
 //
 // test removeSticker
 //
-TEST_CASE("StickerSheet::removeSticker() can remove the last sticker", "[weight=1][part=2][timeout=30000][valgrind]") {
+TEST_CASE("StickerSheet::removeSticker() can remove the last sticker", "[remove-last][weight=1][part=2][timeout=30000][valgrind]") {
   Image alma;     alma.readFromFile("../tests/alma.png");
   Image i;        i.readFromFile("../tests/i.png");
   Image expected; expected.readFromFile("../tests/expected.png");
@@ -109,7 +109,7 @@ TEST_CASE("StickerSheet::removeSticker() can remove the last sticker", "[weight=
   REQUIRE( sheet.render() == expected );
 }
 
-TEST_CASE("StickerSheet::removeSticker() can remove the first sticker", "[weight=1][part=2][timeout=30000][valgrind]") {
+TEST_CASE("StickerSheet::removeSticker() can remove the first sticker", "[remove-first][weight=1][part=2][timeout=30000][valgrind]") {
   Image alma;     alma.readFromFile("../tests/alma.png");
   Image i;        i.readFromFile("../tests/i.png");
   Image expected; expected.readFromFile("../tests/expected.png");
@@ -122,7 +122,7 @@ TEST_CASE("StickerSheet::removeSticker() can remove the first sticker", "[weight
   REQUIRE( sheet.render() == expected );
 }
 
-TEST_CASE("StickerSheet::removeSticker() can remove all stickers", "[weight=1][part=2][timeout=30000][valgrind]") {
+TEST_CASE("StickerSheet::removeSticker() can remove all stickers", "[remove-all][weight=1][part=2][timeout=30000][valgrind]") {
   Image alma;     alma.readFromFile("../tests/alma.png");
   Image i;        i.readFromFile("../tests/i.png");
   Image expected; expected.readFromFile("../tests/expected.png");
@@ -143,7 +143,7 @@ TEST_CASE("StickerSheet::removeSticker() can remove all stickers", "[weight=1][p
 //
 // test that getSticker works
 //
-TEST_CASE("StickerSheet::getSticker() returns the sticker", "[weight=1][part=2][timeout=30000][valgrind]") {
+TEST_CASE("StickerSheet::getSticker() returns the sticker", "[getSticker][weight=1][part=2][timeout=30000][valgrind]") {
   Image alma;     alma.readFromFile("../tests/alma.png");
   Image i;        i.readFromFile("../tests/i.png");
   Image expected; expected.readFromFile("../tests/expected.png");
@@ -154,7 +154,7 @@ TEST_CASE("StickerSheet::getSticker() returns the sticker", "[weight=1][part=2][
   REQUIRE( *(sheet.getSticker(0)) == i );
 }
 
-TEST_CASE("StickerSheet::getSticker() returns NULL for a non-existant sticker", "[weight=1][part=2][timeout=30000][valgrind]") {
+TEST_CASE("StickerSheet::getSticker() returns NULL for a non-existant sticker", "[getSticker-nonexistent][weight=1][part=2][timeout=30000][valgrind]") {
   Image alma;     alma.readFromFile("../tests/alma.png");
   Image i;        i.readFromFile("../tests/i.png");
   Image expected; expected.readFromFile("../tests/expected.png");
@@ -165,7 +165,7 @@ TEST_CASE("StickerSheet::getSticker() returns NULL for a non-existant sticker", 
   REQUIRE( sheet.getSticker(1) == NULL );
 }
 
-TEST_CASE("StickerSheet::getSticker() returns NULL for a removed sticker", "[weight=1][part=2][timeout=30000][valgrind]") {
+TEST_CASE("StickerSheet::getSticker() returns NULL for a removed sticker", "[getSticker-removed][weight=1][part=2][timeout=30000][valgrind]") {
   Image alma;     alma.readFromFile("../tests/alma.png");
   Image i;        i.readFromFile("../tests/i.png");
   Image expected; expected.readFromFile("../tests/expected.png");
@@ -231,7 +231,7 @@ TEST_CASE("A complex StickerSheet is correct", "[weight=5][part=2][timeout=30000
 //
 // copy ctor
 //
-TEST_CASE("StickerSheet's copy constructor makes an independent copy", "[weight=2][part=2][timeout=30000][valgrind]") {
+TEST_CASE("StickerSheet's copy constructor makes an independent copy", "[stickersheet-copyconst][weight=2][part=2][timeout=30000][valgrind]") {
   Image alma; alma.readFromFile("../tests/alma.png");
   Image i;    i.readFromFile("../tests/i.png");
   Image expected; expected.readFromFile("../tests/expected.png");
@@ -248,7 +248,7 @@ TEST_CASE("StickerSheet's copy constructor makes an independent copy", "[weight=
   REQUIRE( s2.render() == expected );
 }
 
-TEST_CASE("StickerSheet's assignment operator makes an independent copy", "[weight=2][part=2][timeout=30000][valgrind]") {
+TEST_CASE("StickerSheet's assignment operator makes an independent copy", "[stickersheet-assignment][weight=2][part=2][timeout=30000][valgrind]") {
   Image alma; alma.readFromFile("../tests/alma.png");
   Image i;    i.readFromFile("../tests/i.png");
   Image expected; expected.readFromFile("../tests/expected.png");
@@ -270,7 +270,7 @@ TEST_CASE("StickerSheet's assignment operator makes an independent copy", "[weig
 //
 // out of bounds with sanity checks
 //
-TEST_CASE("A Stickersheet with stickers placed beyond base image boundaries works", "[weight=5][part=2][timeout=30000][valgrind]") {
+TEST_CASE("A Stickersheet with stickers placed beyond base image boundaries works", "[stickers-beynd-bounds][weight=5][part=2][timeout=30000][valgrind]") {
   Image alma; alma.readFromFile("../tests/alma.png");
   Image i;    i.readFromFile("../tests/i.png");
 

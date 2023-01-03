@@ -4,6 +4,9 @@
 #pragma once
 
 #include <iterator>
+#include <set>
+#include <vector>
+#include <stdexcept>
 #include "cs225/HSLAPixel.h"
 #include "cs225/PNG.h"
 #include "../Point.h"
@@ -23,14 +26,18 @@ using namespace cs225;
  */
 class ImageTraversal {
 public:
+
+  ImageTraversal() = default;
+
   /**
    * A forward iterator through an ImageTraversal.
    */
   class Iterator : std::iterator<std::forward_iterator_tag, Point> {
   public:
     Iterator();
+    Iterator(ImageTraversal* traversal);
 
-    Iterator & operator++();
+    Iterator& operator++();
     Point operator*();
     bool operator!=(const Iterator &other);
 
@@ -39,8 +46,25 @@ public:
 
   private:
     /** @todo [Part 1] */
-    /** add private members here if neccesary*/
+    ImageTraversal* traversal_;
+    Point current_;
 
+    bool Visited(const Point& p);
+
+    /**
+     * Returns true if the point is within tolerance of 
+     * traversal_'s start and if it's unvisited.
+     */
+    bool IsNotValidPoint(const Point& p, double delta);
+    bool WithinSearchSpace(const Point& p);
+
+    /**
+     * Adds all nonvisited neighbors points of p
+     * that are within the tolerance to traversal_
+    */
+    void AddPointNeighbors(const Point& p);
+
+    void RemoveNextVisitedPoints();
   };
 
   /**
@@ -76,6 +100,13 @@ public:
    */
   virtual bool empty() const = 0;
 
+protected:
+  PNG search_space_;
+  Point start_;
+  double tolerance_;
+
 private:
-  static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);  
+  std::vector<std::vector<bool>> visited_;
+
+  static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);
 };

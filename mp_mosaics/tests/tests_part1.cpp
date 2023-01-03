@@ -56,8 +56,8 @@ void compareBinaryFiles( string yourFile, string ourFile )
 }
 
 TEST_CASE("KDTree::testSmallerDimVal Tests", "[weight=1][part=1]") {
-  vector<Point<3>> pts;
-  KDTree<3> tree(pts);
+  // vector<Point<3>> pts;
+  KDTree<3> tree;
   Point<3> a(1, 2, 3);
   Point<3> b(3, 2, 1);
 
@@ -67,8 +67,8 @@ TEST_CASE("KDTree::testSmallerDimVal Tests", "[weight=1][part=1]") {
 }
 
 TEST_CASE("KDTree::shouldReplace Tests", "[weight=1][part=1]") {
-  vector<Point<3>> pts;
-  KDTree<3> tree(pts);
+  //vector<Point<3>> pts;
+  KDTree<3> tree;
 
   Point<3> target(1, 3, 5);
   Point<3> currentBest1(1, 3, 2);
@@ -115,8 +115,67 @@ TEST_CASE("KDTree constructor, 1D (Dim=1)", "[weight=1][part=1]") {
 
 TEST_CASE("KDTree constructor, 3D (Dim = 3)", "[weight=1][part=1]") {
   _test_linear_constructor<3>(31);
+}
+
+TEST_CASE("QuickSelect Tests", "[part=1]") {
+  double coords[6][2] = {
+    {-15, 7}, {6, 7}, {-13, -1},
+    {-5, 0}, {14, -3}, {14, 2}
+  };
+  SECTION("QuickSelect smallest element") {
+    vector<Point<2>> points;
+    for (int i = 0; i < 6; ++i)
+        points.push_back(Point<2>(coords[i]));
+    
+    SECTION("Select by 0th dim") {
+      REQUIRE(QuickSelect<2>(points, 0, {0, points.size()-1, 0}) == Point<2>(-15, 7));
+    }
+    SECTION("Select by 1st dim") {
+      REQUIRE(QuickSelect<2>(points, 0, {0, points.size()-1, 1}) == Point<2>(14, -3));
+    }
   }
 
+  SECTION("QuickSelect largest element") {
+    vector<Point<2>> points;
+    for (int i = 0; i < 6; ++i)
+        points.push_back(Point<2>(coords[i]));
+    
+    SECTION("Select by 0th dim") {
+      REQUIRE(QuickSelect<2>(points, points.size()-1, {0, points.size()-1, 0}) == Point<2>(14, 2));
+    }
+    SECTION("Select by 1st dim") {
+      REQUIRE(QuickSelect<2>(points, points.size()-1, {0, points.size()-1, 1}) == Point<2>(6, 7));
+    }
+  }
+
+  SECTION("QuickSelect median of entire list") {
+    vector<Point<2>> points;
+    for (int i = 0; i < 6; ++i)
+      points.push_back(Point<2>(coords[i]));
+    int median_index = (points.size()-1)/2;
+    SECTION("Select by 0th dim") {
+      REQUIRE(QuickSelect<2>(points, median_index, {0, points.size()-1, 0}) == Point<2>(-5, 0));
+    }
+    SECTION("Select by 1st dim") {
+      REQUIRE(QuickSelect<2>(points, median_index, {0, points.size()-1, 1}) == Point<2>(-5, 0));
+    }
+  }
+
+  SECTION("QuickSelect median of part of list") {
+    vector<Point<2>> points;
+    for (int i = 0; i < 6; ++i)
+      points.push_back(Point<2>(coords[i]));
+    int middle_index = (points.size()-1)/2;
+    SECTION("Select from 1st half of array by 0th dim") {
+      int median_index = (middle_index-1)/2;
+      REQUIRE(QuickSelect<2>(points, median_index, {0, middle_index-1, 0}) == Point<2>(-15, 7));
+    }
+    SECTION("Select from 2nd half of array by 1st dim") {
+      int median_index = (points.size()-1 + middle_index+1) / 2;
+      REQUIRE(QuickSelect<2>(points, median_index, {0, points.size()-1, 1}) == Point<2>(-15, 7));
+    }
+  }
+}
 
 // //
 // // Simple Nearest Neighbor

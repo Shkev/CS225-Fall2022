@@ -12,5 +12,5 @@ using namespace cs225;
  */
 HSLAPixel MyColorPicker::getColor(unsigned x, unsigned y) {
   /* @todo [Part 3] */
-  return HSLAPixel();
+  return HSLAPixel(0, 0, static_cast<double>(x+y % 37) / 37);
 }

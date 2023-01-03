@@ -10,6 +10,8 @@
 #include <vector>
 #include <sstream>
 #include <string>
+#include <algorithm>
+#include <cassert>
 
 /**
  * The AVLTree class represents a linked-memory AVL Tree.
@@ -223,9 +225,11 @@ class AVLTree
 
     /**
      * Gets the pre-order traversal of an AVL tree's keys.
-     * @param subRoot The current node in the recursion
+     * @param subRoot The xcurrent node in the recursion
      */
     void getPreorderTraversal(const Node* subRoot, std::vector<K>& traversal) const;
+
+    Node* GetIOP(Node* subtree);
 
     /** This variable is used for grading. */
     std::ostream* _out;

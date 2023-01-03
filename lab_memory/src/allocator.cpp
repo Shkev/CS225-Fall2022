@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <utility>
+#include <cassert>
 
 #include "allocator.h"
 #include "fileio.h"
@@ -16,6 +17,13 @@ Allocator::Allocator(const std::string& studentFile, const std::string& roomFile
     createLetterGroups();
     loadStudents(studentFile);
     loadRooms(roomFile);
+}
+
+Allocator::~Allocator() {
+    if (alpha != nullptr) delete[] alpha;
+    if (rooms != nullptr) delete[] rooms;
+    alpha = nullptr;
+    rooms = nullptr;
 }
 
 void Allocator::createLetterGroups()
@@ -36,6 +44,7 @@ void Allocator::loadStudents(const std::string& file)
         std::string name = fileio::nextStudent();
         char letter = name[0];
         int index = (int)letter - 'A';
+        assert(index < 26);
         alpha[index].addStudent();
     }
 }
@@ -44,14 +53,15 @@ void Allocator::loadRooms(const std::string& file)
 {
     // Read in rooms
     fileio::loadRooms(file);
+    roomCount = fileio::getNumRooms();
     rooms = new Room[roomCount];
 
-    totalCapacity = 0;
+    totalCapacity = 0; 
     int i = 0;
-    while (fileio::areMoreRooms()) {
-        i++; 
+    while (fileio::areMoreRooms() && i < roomCount) {
         rooms[i] = fileio::nextRoom();
         totalCapacity += rooms[i].capacity;
+        ++i;
     }
 }
 

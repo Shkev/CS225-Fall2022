@@ -10,6 +10,8 @@
 #include <vector>
 #include <sstream>
 #include <string>
+#include <algorithm>
+#include <cassert>
 #include "utils.h"
 
 /**
@@ -38,8 +40,20 @@ class BST
          *  node will hold.
          */
         Node(const K& newKey, const V& newValue)
-            : key(newKey), value(newValue), left(NULL), right(NULL)
+            : key(newKey), value(newValue), left(nullptr), right(nullptr)
         {
+        }
+
+        bool HasNoChildren() {
+          return (left == nullptr) && (right == nullptr);
+        }
+
+        bool HasOneChild() {
+          return (left == nullptr && right != nullptr) || (left != nullptr && right == nullptr);
+        }
+
+        bool HasTwoChildren() {
+          return (left != nullptr) && (right != nullptr);
         }
     };
 
@@ -204,6 +218,10 @@ class BST
 
     /** This variable tests the order of function calls **/
     std::vector<std::string> functionCalls;
+
+    void DeleteNode(Node*& node);
+
+    Node* FindIOP(Node* node);
 };
 
 

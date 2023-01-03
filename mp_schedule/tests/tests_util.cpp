@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include <catch2/catch_test_macros.hpp>
+#include <iostream>
 
 using std::string;
 

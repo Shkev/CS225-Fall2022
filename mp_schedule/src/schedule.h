@@ -5,15 +5,52 @@
 
 #pragma once
 
+#include <cstdlib>
+#include <cmath>
 #include <string>
 #include <vector>
-#include <map>
+#include <list>
 #include <unordered_map>
 #include <fstream>
 #include <sstream>
+#include <unordered_set>
 #include <set>
+#include <algorithm>
 
-typedef std::vector<std::vector<std::string> > V2D; 
+typedef std::vector<std::vector<std::string>> V2D;
+typedef int Color;
+
+using std::unordered_map;
+using std::unordered_set;
+using std::string;
+using std::list;
+using std::vector;
+
+
+class Graph {
+public:
+  Graph() = default;
+  Graph(V2D course_rosters);
+
+  unordered_set<string> GetNodes();
+  unsigned GetNodeDegree(string node);
+
+  /**
+   * Implements green heuristic introduced in MP instructions
+   * @param coloring The map that will store the color corresponding to each course in the coloring
+   * @returns true if a coloring is possible and false if not.
+  */
+  bool ColorIt(unsigned max_colors, unordered_map<string, Color>& coloring);
+
+private:
+  /**
+   * Graph stores nodes representing courses. There exists an edge
+   * between courses if there exists student(s) that is both classes
+ */
+  unordered_map<string, unordered_set<string>> adj_list_;
+  vector<std::pair<string, unsigned>> node_degree_;
+  unordered_set<string> nodes_;
+};
 
 
 /**

@@ -22,6 +22,8 @@
 
 using namespace cs225;
 
+Point<3> convertToXYZ(const LUVAPixel& pixel);
+
 /**
  * Map the image tiles into a mosaic canvas which closely
  * matches the input image.

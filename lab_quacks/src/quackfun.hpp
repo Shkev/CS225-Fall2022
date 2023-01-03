@@ -29,11 +29,12 @@ namespace QuackFun {
 template <typename T>
 T sum(stack<T>& s)
 {
-
-    // Your code here
-    return T(); // stub return value (0 for primitive types). Change this!
-                // Note: T() is the default value for objects, and 0 for
-                // primitive types
+    if (s.empty()) return 0;
+    T top = s.top();
+    s.pop();
+    T total = top + sum(s);
+    s.push(top);
+    return total;
 }
 
 /**
@@ -55,9 +56,19 @@ T sum(stack<T>& s)
  */
 bool isBalanced(queue<char> input)
 {
-
-    // @TODO: Make less optimistic
-    return true;
+    stack<char> open_brackets;
+    while (!input.empty()) {
+        char c = input.front();
+        if (c == '[') {
+            open_brackets.push(c);
+        } else if (c == ']') {
+            if (open_brackets.empty()) return false;
+            open_brackets.pop();
+        }
+        input.pop();
+    }
+    if (open_brackets.empty()) return true;
+    return false;
 }
 
 /**
@@ -79,8 +90,60 @@ template <typename T>
 void scramble(queue<T>& q)
 {
     stack<T> s;
-    // optional: queue<T> q2;
+    queue<T> q2;
+    // first element stays
+    AppendQueueElem(q2, q, 1);
+    std::cout << q2.back();
+    queue<T> q_rev = ReverseQueueElements(q, 2);
+    AppendQueueElem(q2, q_rev, 2);
+    std::cout << q2.back();
+    AppendQueueElem(q2, q, 3);
+    std::cout << q2.back();
+    q_rev = ReverseQueueElements(q, 4);
+    AppendQueueElem(q2, q_rev, 4);
+    std::cout << q2.back();
+    AppendQueueElem(q2, q, 5);
+    std::cout << q2.back();
+    q_rev = ReverseQueueElements(q, 2);
+    AppendQueueElem(q2, q_rev, 2);
+    std::cout << q2.back();
 
-    // Your code here
+    assert(q.empty());
+    assert(!q2.empty());
+
+    queue<T> q3 = q2;
+    while (!q3.empty()) {
+        std::cout << q3.front() << ' ';
+        q3.pop();
+    }
+    std::cout << '\n';
+
+    q = q2;
 }
+
+template <typename T>
+queue<T> ReverseQueueElements(queue<T>& q, unsigned num_elem) {
+    stack<T> s;
+    queue<T> q2;
+    if (q.empty()) return q2;
+    for (unsigned i = 0; !q.empty() && i < num_elem; ++i) {
+        s.push(q.front());
+        q.pop();
+    }
+    while (!s.empty()) {
+        q2.push(s.top());
+        s.pop();
+    }
+    return q2;
+}
+
+template <typename T>
+void AppendQueueElem(queue<T>& q_loc, queue<T>& q_cp, int num_elem) {
+    while (!q_cp.empty() && num_elem > 0) {
+        q_loc.push(q_cp.front());
+        q_cp.pop();
+        num_elem--;
+    }
+}
+
 }

@@ -5,6 +5,7 @@
 
 #include "nim_learner.h"
 #include <ctime>
+#include <cassert>
 
 
 /**
@@ -26,6 +27,36 @@
  */
 NimLearner::NimLearner(unsigned startingTokens) : g_(true, true) {
     /* Your code goes here! */
+    startingVertex_ = "p1-" + std::to_string(startingTokens);
+    for (int i = 0; i <= static_cast<int>(startingTokens); ++i) {
+      std::string i_str = std::to_string(i);
+      g_.insertVertex("p1-" + i_str);
+      g_.insertVertex("p2-" + i_str);
+    }
+    for (int i = static_cast<int>(startingTokens); i >= 0; --i) {
+      Vertex src = "p1-" + std::to_string(i);
+      Vertex dest1 = "p2-" + std::to_string(std::max(i-1, 0));
+      Vertex dest2 = "p2-" + std::to_string(std::max(i-2, 0));
+      if (!g_.edgeExists(src, dest1)) {
+        g_.insertEdge(src, dest1);
+        g_.setEdgeWeight(src, dest1, 0);
+      }
+      if (!g_.edgeExists(src, dest2)) {
+        g_.insertEdge(src, dest2);
+        g_.setEdgeWeight(src, dest2, 0);
+      }
+      src = "p2-" + std::to_string(i);
+      dest1 = "p1-" + std::to_string(std::max(i-1, 0));
+      dest2 = "p1-" + std::to_string(std::max(i-2, 0));
+      if (!g_.edgeExists(src, dest1)) {
+        g_.insertEdge(src, dest1);
+        g_.setEdgeWeight(src, dest1, 0);
+      }
+      if (!g_.edgeExists(src, dest2)) {
+        g_.insertEdge(src, dest2);
+        g_.setEdgeWeight(src, dest2, 0);
+      }
+    }
 }
 
 /**
@@ -40,6 +71,15 @@ NimLearner::NimLearner(unsigned startingTokens) : g_(true, true) {
 std::vector<Edge> NimLearner::playRandomGame() const {
   vector<Edge> path;
  /* Your code goes here! */
+  Vertex curr = startingVertex_;
+  Vertex dest;
+  while (curr != "p1-0" && curr != "p2-0") {
+    vector<Vertex> adj_states = g_.getAdjacent(curr);
+    assert(!adj_states.empty());
+    dest = adj_states.at(rand() % adj_states.size());
+    path.push_back(g_.getEdge(curr, dest));
+    curr = dest;
+  }
   return path;
 }
 
@@ -60,7 +100,15 @@ std::vector<Edge> NimLearner::playRandomGame() const {
  * @param path A path through the a game of Nim to learn.
  */
 void NimLearner::updateEdgeWeights(const std::vector<Edge> & path) {
- /* Your code goes here! */
+  /* Your code goes here! */
+  std::string winner = path.at(path.size()-1).source.substr(0, 2);
+  for (const Edge& e : path) {
+    if (e.source.substr(0, 2) == winner) { // edge comes from winner, reward it
+      g_.setEdgeWeight(e.source, e.dest, e.getWeight() + 1);
+    } else { // edge comes from loser, punish it
+      g_.setEdgeWeight(e.source, e.dest, e.getWeight() - 1);
+    }
+  }
 }
 
 /**

@@ -18,6 +18,7 @@
 #include "cs225/point.h"
 
 using std::vector;
+using std::tuple;
 using std::string;
 using std::ostream;
 using std::cout;
@@ -107,6 +108,8 @@ class KDTree
      */
     bool shouldReplace(const Point<Dim>& target, const Point<Dim>& currentBest,
                        const Point<Dim>& potential) const;
+
+    KDTree(): root(nullptr), size(0) {};
 
     /**
      * Constructs a KDTree from a vector of Points, each having dimension Dim.
@@ -258,10 +261,34 @@ class KDTree
     void printTree(KDTreeNode * subroot, std::vector<std::string>& output,
                    int left, int top, int width, int currd) const;
 
+    void Clear(KDTreeNode* subroot);
+    void Copy(const KDTree& other);
+    KDTreeNode* CopyTree(KDTreeNode* other_subroot);
+
     /**
      * @todo Add your helper functions here.
      */
+    void BuildTree(KDTreeNode*& subroot, vector<Point<Dim>>& new_points, tuple<int, int, int> points_info);
+
+    Point<Dim> FindNearestNeighbor(KDTreeNode* curr, const Point<Dim>& target, int depth) const;
+
+    /**
+     * Returns the node whose point is closest to target
+    */
+    Point<Dim> ClosestPoint(const Point<Dim>& target, const Point<Dim>& a, const Point<Dim>& b) const;
 };
+
+template <int Dim>
+long PointDistSquared(Point<Dim> a, Point<Dim> b);
+
+/**
+ * Finds the k-th smallest element in the Points array by the given dimension in points_info (3rd element).
+ * It also modifies the points array so the k-th smallest element is at index start+k
+ * and all elements to the left of it are smaller than it and all those
+ * to the right are greater
+*/
+template <int Dim>
+Point<Dim> QuickSelect(vector<Point<Dim>>& points, size_t k, tuple<int, int, int> points_info);
 
 #include "kdtree.hpp"
 #include "kdtree_extras.hpp"

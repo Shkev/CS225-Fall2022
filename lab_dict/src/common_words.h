@@ -9,10 +9,10 @@
 #pragma once
 
 #include <string>
-#include <map>
+#include <unordered_map>
 #include <vector>
 
-using std::map;
+using std::unordered_map;
 using std::vector;
 using std::string;
 
@@ -44,12 +44,12 @@ class CommonWords
      * #file_word_maps holds a map for each file. Each map associates a word in
      * that file to the number of times it has been seen in that file.
      */
-    vector<map<string, unsigned int>> file_word_maps;
+    vector<unordered_map<string, unsigned int>> file_word_maps;
 
     /**
      * #common maps a word to the number of documents that word appears in
      */
-    std::map<std::string, unsigned int> common;
+    std::unordered_map<std::string, unsigned int> common;
 
     /* helper functions */
 

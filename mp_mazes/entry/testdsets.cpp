@@ -22,9 +22,11 @@ int main()
     s.setunion(7, 2);
     s.setunion(4, 6);
 
+    cout << s.find(1) << endl;
     cout << s.find(7) << endl;
     cout << s.find(5) << endl;
     cout << s.find(6) << endl;
+    cout << s.size(5) << endl;
 
     s.addelements(1);
 

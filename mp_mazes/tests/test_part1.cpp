@@ -86,6 +86,7 @@ TEST_CASE("size2", "[weight=10][part1]")
 	disjSets.setunion(1, 7);
 	disjSets.setunion(2, 6);
 	disjSets.setunion(3, 5);
+	REQUIRE(2 == disjSets.size(3));
 	disjSets.setunion(2, 3);
 	REQUIRE(4 == disjSets.size(3));
 	disjSets.setunion(1, 3);

@@ -12,7 +12,7 @@
 #include "List.h"
 
 using namespace cs225;
-
+using std::cout;
 
 //
 // Non-iterator Tests:
@@ -77,6 +77,47 @@ TEST_CASE("List::triplerotate simple", "[weight=10][part=1][valgrind]") {
     list.print(s);
 
     REQUIRE("< 2 3 1 5 6 4 >" == s.str());
+}
+
+TEST_CASE("List::split on empty list", "[weight=5][part=1][valgrind]") {
+    List<int> list;
+
+    List<int> slist = list.split(0);
+    stringstream s1, s2;
+
+    list.print(s1);
+    slist.print(s2);
+
+    REQUIRE( "< >" == s1.str() );
+    REQUIRE( "< >" == s2.str() );
+}
+
+TEST_CASE("List::split on list with single element", "[weight=5][part=1][valgrind]") {
+    List<int> list;
+
+    list.insertBack(1);
+
+    SECTION("Splitting past last") {
+        List<int> slist = list.split(1);
+        stringstream s1, s2;
+
+        list.print(s1);
+        slist.print(s2);
+
+        REQUIRE( "< 1 >" == s1.str() );
+        REQUIRE( "< >" == s2.str() );
+    }
+
+    SECTION("Splitting at zeroth element") {
+        List<int> slist = list.split(0);
+        stringstream s1, s2;
+
+        list.print(s1);
+        slist.print(s2);
+
+        REQUIRE( "< >" == s1.str() );
+        REQUIRE( "< 1 >" == s2.str() );
+    }
 }
 
 TEST_CASE("List::split simple", "[weight=5][part=1][valgrind]") {
@@ -204,7 +245,7 @@ TEST_CASE("List::ListIterator::operator++ (post-increment) returns an un-increme
     REQUIRE( *pre == 9 );
 }
 
-TEST_CASE("List::ListIterator::operator-- moves the iterator backwards", "[weight=1][part=1][valgrind]") {
+TEST_CASE("List::ListIterator::operator-- moves the iterator backwards from middle of list", "[weight=1][part=1][valgrind]") {
     List<unsigned> list;
     for (unsigned i = 0; i < 10; i++) { list.insertFront(i); }
 
@@ -214,6 +255,28 @@ TEST_CASE("List::ListIterator::operator-- moves the iterator backwards", "[weigh
     iter++;  REQUIRE( *iter == 7 );
     iter--;  REQUIRE( *iter == 8 );
     iter--;  REQUIRE( *iter == 9 );
+}
+
+TEST_CASE("List::ListIterator::operator-- moves the iterator backwards from end", "[weight=1][part=1][valgrind]") {
+    List<int> list;
+    for (int i = 0; i < 10; i++) { list.insertFront(i); }
+
+    SECTION("Basic list, no additions") {
+        List<int>::ListIterator iter = list.end();
+
+        --iter; REQUIRE( *iter == 0 );
+        --iter; REQUIRE( *iter == 1 );
+        --iter; REQUIRE( *iter == 2 );
+    }
+
+    SECTION("Decrement after additions") {
+        List<int>::ListIterator iter = list.end();
+        list.insertBack(-1);
+
+        --iter; REQUIRE( *iter == -1 );
+        --iter; REQUIRE( *iter == 0 );
+        --iter; REQUIRE( *iter == 1 );
+    }
 }
 
 TEST_CASE("List::ListIterator::operator-- (post-increment) returns an un-incremented iterator", "[weight=1][part=1][valgrind]") {

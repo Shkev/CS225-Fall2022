@@ -1,12 +1,3 @@
-#include "cs225/PNG.h"
-#include <list>
-#include <iostream>
-
-#include "colorPicker/ColorPicker.h"
-#include "imageTraversal/ImageTraversal.h"
-
-#include "Point.h"
-#include "Animation.h"
 #include "FloodFilledImage.h"
 
 using namespace cs225;
@@ -16,7 +7,7 @@ using namespace cs225;
  * 
  * @param png The starting image of a FloodFilledImage
  */
-FloodFilledImage::FloodFilledImage(const PNG & png) {
+FloodFilledImage::FloodFilledImage(const PNG & png):image_(png) {
   /** @todo [Part 2] */
 }
 
@@ -29,7 +20,8 @@ FloodFilledImage::FloodFilledImage(const PNG & png) {
  */
 void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & colorPicker) {
   /** @todo [Part 2] */
-}
+  operations_.push_back(make_pair(&traversal, &colorPicker));
+} 
 
 /**
  * Creates an Animation of frames from the FloodFill operations added to this object.
@@ -51,7 +43,24 @@ void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & co
  *   - The final frame, after all pixels have been filed)
  */ 
 Animation FloodFilledImage::animate(unsigned frameInterval) const {
+  PNG image_animate = image_;
   Animation animation;
+  animation.addFrame(image_animate);
   /** @todo [Part 2] */
+  for (std::pair<ImageTraversal*, ColorPicker*> op : operations_) {
+    ImageTraversal* traversal;
+    ColorPicker* cp;
+    std::tie(traversal, cp) = op;
+    int count = 0;
+    for (Point p : *traversal) {
+      HSLAPixel& pixel = image_animate.getPixel(p.x, p.y);
+      pixel = cp->getColor(p.x, p.y);
+      ++count;
+      if (count % frameInterval == 0) {
+        animation.addFrame(image_animate);
+      }
+    }
+    animation.addFrame(image_animate);
+  }
   return animation;
 }

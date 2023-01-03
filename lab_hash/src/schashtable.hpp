@@ -4,6 +4,8 @@
  */
 
 #include "schashtable.h"
+#include <cassert>
+#include <iostream>
  
 template <class K, class V>
 SCHashTable<K, V>::SCHashTable(size_t tsize)
@@ -49,34 +51,50 @@ SCHashTable<K, V>::SCHashTable(SCHashTable<K, V> const& other)
 template <class K, class V>
 void SCHashTable<K, V>::insert(K const& key, V const& value)
 {
-
     /**
      * @todo Implement this function.
      *
      */
+    size_t idx = hashes::hash(key, size);
+    table[idx].push_front({key, value});
+    elems++;
+    if (shouldResize()) {
+        resizeTable();
+    }
 }
 
 template <class K, class V>
 void SCHashTable<K, V>::remove(K const& key)
 {
-    typename std::list<std::pair<K, V>>::iterator it;
     /**
      * @todo Implement this function.
      *
      * Please read the note in the lab spec about list iterators and the
      * erase() function on std::list!
      */
-    (void) key; // prevent warnings... When you implement this function, remove this line.
+    size_t idx = hashes::hash(key, size);
+    typename std::list<std::pair<K, V>>::iterator it = table[idx].begin();
+    while (it->first != key) {
+        it++;
+    }
+    if (it != table[idx].end()) {
+        table[idx].erase(it);
+    }
+    elems--;
 }
 
 template <class K, class V>
 V SCHashTable<K, V>::find(K const& key) const
 {
-
     /**
      * @todo: Implement this function.
      */
-
+    size_t idx = hashes::hash(key, size);
+    for (std::pair<K, V> p : table[idx]) {
+        if (p.first == key) {
+            return p.second;
+        }
+    }
     return V();
 }
 
@@ -134,4 +152,15 @@ void SCHashTable<K, V>::resizeTable()
      *
      * @hint Use findPrime()!
      */
+    size_t new_size = findPrime(2*size);
+    std::list<std::pair<K, V>>* resized_table = new std::list<std::pair<K, V>>[new_size];
+    for (size_t i = 0; i < size; ++i) { // rehash all table elements
+        for (std::pair<K, V> p : table[i]) {
+            size_t idx = hashes::hash(p.first, new_size);
+            resized_table[idx].push_front({p.first, p.second});
+        }
+    }
+    size = new_size;
+    delete[] table;
+    table = resized_table;
 }

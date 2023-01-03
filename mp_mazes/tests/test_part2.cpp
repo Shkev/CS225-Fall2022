@@ -153,6 +153,9 @@ TEST_CASE("testMakeSmallMaze", "[weight=10][part2]")
 {
     SquareMaze maze;
     maze.makeMaze(2, 2);
+    PNG* img = maze.drawMaze();
+    img->writeToFile("../two.png");
+    delete img;
     assert_maze_tree(maze, 2, 2);
 }
 

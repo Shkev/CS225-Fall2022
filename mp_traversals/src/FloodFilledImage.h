@@ -6,7 +6,7 @@
 
 #include "cs225/PNG.h"
 #include <list>
-#include <iostream>
+#include <tuple>
 
 #include "colorPicker/ColorPicker.h"
 #include "imageTraversal/ImageTraversal.h"
@@ -30,5 +30,6 @@ public:
 private:
 	/** @todo [Part 2] */
 	/** add private members here*/
-
+  PNG image_;
+  std::list<std::pair<ImageTraversal*, ColorPicker*>> operations_;
 };

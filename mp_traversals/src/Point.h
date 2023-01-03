@@ -1,7 +1,7 @@
 /**
  * @file Point.h
  * every 2D point of the image is represented by a Point class
- * you need to trverse all the points of the image
+ * you need to traverse all the points of the image
  */
 #pragma once
 

@@ -1,3 +1,4 @@
+#include <iostream>
 
 #include "cs225/PNG.h"
 #include "FloodFilledImage.h"
@@ -13,19 +14,34 @@
 #include "colorPicker/MyColorPicker.h"
 
 using namespace cs225;
+using std::cout;
 
 int main() {
-
   // @todo [Part 3]
   // - The code below assumes you have an Animation called `animation`
   // - The code provided below produces the `myFloodFill.png` file you must
   //   submit Part 3 of this assignment -- uncomment it when you're ready.
   
-  /*
+  PNG png;
+  png.readFromFile("../mandelbrot.png");
+  
+  FloodFilledImage image(png);
+  BFS bfs(png, Point(40, 40), 0.13);
+  BFS dfs(png, Point(40, 40), 0.13);
+  MyColorPicker bw;
+  RainbowColorPicker r(150);
+  image.addFloodFill( bfs, bw );
+  image.addFloodFill( dfs, r );
+
+
+  cout << "Creating animation...\n";
+  Animation animation = image.animate(10000);
+
   PNG lastFrame = animation.getFrame( animation.frameCount() - 1 );
-  lastFrame.writeToFile("myFloodFill.png");
-  animation.write("myFloodFill.gif");
-  */
+
+  cout << "Writing animation to file...\n";
+  lastFrame.writeToFile("../myFloodFill.png");
+  animation.write("../myFloodFill.gif");
 
 
   return 0;

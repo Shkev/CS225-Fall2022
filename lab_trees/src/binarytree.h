@@ -11,6 +11,8 @@
 #include <vector>
 #include <sstream>
 #include <random>
+#include <stack>
+#include <limits>
 
 /**
  * The BinaryTree class represents a templated linked-memory tree data
@@ -170,8 +172,9 @@ class BinaryTree
          */
         void printLeftToRight(const Node* subRoot) const;
 
+        void mirror(Node* subRoot);
 
-
+        bool isOrderedRecursive(const Node* subRoot, T min, T max) const;
 
         /**
          * Private helper function for the sorted public insert function.

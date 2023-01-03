@@ -37,7 +37,7 @@ class TreeTraversal {
                  * @param root The root of the tree to be traversed
                  */
                 Iterator(TreeTraversal<T>* traversal, typename BinaryTree<T>::Node* root)
-                    :traversal(traversal), root(root)
+                    : traversal(traversal), root(root)
                 {
                     /** initialize the current iterator to top Node of the stack*/
                     current = traversal->peek();
@@ -51,7 +51,7 @@ class TreeTraversal {
                 Iterator & operator++() 
                 {
                     if (!traversal->empty()) {
-                        current = traversal->pop();			
+                        current = traversal->pop();
                         traversal->add(current);
                         current = traversal->peek();
                     }	

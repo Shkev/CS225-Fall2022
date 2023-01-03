@@ -79,7 +79,7 @@ TEST_CASE("sum", "[valgrind][weight=3]"){
     }
 }
 
-TEST_CASE("isBalanced", "[valgrind][weight=3]")
+TEST_CASE("isBalanced", "[isBalanced][valgrind][weight=3]")
 {
 
     SECTION("balanced") {
@@ -155,7 +155,7 @@ TEST_CASE("scramble 17", "[valgrind][weight=3]") {
     }
 }
 
-TEST_CASE("scramble 9", "[valgrind][weight=3]") {
+TEST_CASE("scramble 9", "[scramble9][valgrind][weight=3]") {
     queue<int> q;
     for (int i = 4; i <= 12; i++) {
         q.push(i);

@@ -9,9 +9,14 @@
 
 #include "fib.h"
 
-#include <map>
+#include <unordered_map>
+#include <vector>
+#include <cstddef>
+#include <iostream>
 
-using std::map;
+using namespace std;
+
+using std::unordered_map;
 
 /**
  * Calculates the nth Fibonacci number where the zeroth is defined to be
@@ -22,7 +27,10 @@ using std::map;
 unsigned long fib(unsigned long n)
 {
     /* Your code goes here! */
-    return 0;
+    if (n <= 1) {
+        return n;
+    }
+    return fib(n-1) + fib(n-2);
 }
 
 /**
@@ -33,6 +41,16 @@ unsigned long fib(unsigned long n)
  */
 unsigned long memoized_fib(unsigned long n)
 {
+    cout << n << endl;
     /* Your code goes here! */
-    return 0;
+    static unordered_map<unsigned long, unsigned long> memo;
+    memo[0] = 0;
+    memo[1] = 1;
+    auto lookup = memo.find(n);
+    if (lookup != memo.end()) {
+        return lookup->second;
+    }
+    unsigned long res = memoized_fib(n-1) + memoized_fib(n-2);
+    memo[n] = res;
+    return res;
 }

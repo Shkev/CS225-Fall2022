@@ -25,8 +25,12 @@ class InorderTraversal : public TreeTraversal<T> {
     InorderTraversal(typename BinaryTree<T>::Node* root)
 	    : root(root)
     {
-      stack.push(root);	
-      // your code here
+      stack.push(root);
+      typename BinaryTree<T>::Node* curr = root;
+      while (curr != nullptr) {
+        stack.push(curr);
+        curr = curr->left;
+      }
     }
 
     /**
@@ -52,16 +56,19 @@ class InorderTraversal : public TreeTraversal<T> {
 
     /**
      * Given a node in the tree, add the next appropriate
-     * nodes to the stack such that when popped, and inorder
+     * nodes to the stack such that when popped, an inorder
      * traversal is simulated.
      * Hint: See lab handout for guidance
      * 
      * @param treeNode The subroot that determines what next nodes
      *        should be added to the traversal
      */	
-    void add(typename BinaryTree<T>::Node *& treeNode) {
-      // your code here
-      return;	
+    void add(typename BinaryTree<T>::Node*& treeNode) {
+      typename BinaryTree<T>::Node* curr = treeNode->right;
+      while (curr != nullptr) {
+        stack.push(curr);
+        curr = curr->left;
+      }
     }
 
     /**
